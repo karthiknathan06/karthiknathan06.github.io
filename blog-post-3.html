@@ -8,7 +8,7 @@
     </head>
     <body>
         <header>
-            <h1>Python sort()?? TimSort</h1>
+            <h3>Python sort()?? TimSort</h3>
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
@@ -18,17 +18,17 @@
         </header>
         <section id="blog-content">
             <div class="container">
-              <h1>Timsort: A Hybrid Sorting Algorithm</h1>
+              <h3>Timsort: A Hybrid Sorting Algorithm</h3>
               <p>Timsort is a hybrid sorting algorithm derived from merge sort and insertion sort, designed to perform well on real-world data. It is used in languages like Python and Java for their built-in sorting methods.</p>
           
-              <h2>Key Concepts:</h2>
+              <h3>Key Concepts:</h3>
               <ul>
                   <li><strong>Hybrid Approach:</strong> Timsort takes advantage of merge sort's ability to efficiently sort large datasets and insertion sort's efficiency with smaller datasets.</li>
                   <li><strong>Natural Runs:</strong> It identifies already sorted subsections (called runs) in the array and then merges them, which saves time when the array is partially sorted.</li>
                   <li><strong>Divide and Merge:</strong> If the array isn't naturally sorted, Timsort divides it into chunks of a minimum size (typically 32 or 64 elements), sorts them with insertion sort, and then merges them.</li>
               </ul>
           
-              <h2>Example to Understand Timsort</h2>
+              <h3>Example to Understand Timsort</h3>
               <p>Let's say you have the following array to sort:</p>
               <pre>[5, 3, 8, 6, 2, 7, 4, 1]</pre>
           
@@ -56,14 +56,14 @@
               </ul>
               <p>The merged array becomes: <strong>[1, 2, 3, 4, 5, 6, 7, 8]</strong></p>
           
-              <h2>Summary of Steps:</h2>
+              <h3>Summary of Steps:</h3>
               <ul>
                   <li>Divide the array into smaller chunks.</li>
                   <li>Sort each chunk using insertion sort.</li>
                   <li>Merge the sorted chunks using merge sort.</li>
               </ul>
           
-              <h2>Why is Timsort Efficient?</h2>
+              <h3>Why is Timsort Efficient?</h3>
               <ul>
                   <li><strong>Takes advantage of already sorted parts:</strong> If parts of the array are already sorted, Timsort doesn’t redo that work.</li>
                   <li><strong>Uses insertion sort on small arrays:</strong> Insertion sort is faster for small datasets, making it more efficient for sorting small runs.</li>
