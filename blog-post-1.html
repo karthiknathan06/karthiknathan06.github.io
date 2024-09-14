@@ -8,7 +8,7 @@
     </head>
     <body>
         <header>
-            <h1>Scaling Kubernetes with Multi-tenancy</h1>
+            <h1>Ever Heard about bloom filter??</h1>
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
@@ -17,14 +17,225 @@
             </nav>
         </header>
         <section id="blog-content">
-            <p>
-                In this post, I discuss the challenges and solutions for
-                implementing multi-tenancy in Kubernetes clusters. Drawing from
-                my experience in developing Kubernetes controllers for Tanzu
-                Service Mesh at VMware, I’ll explore the architecture,
-                challenges, and best practices for scaling applications with
-                multi-tenancy.
-            </p>
+            <div class="container">
+                <h3>Understanding Bloom Filters</h1>
+                <p>
+                    When dealing with large datasets, optimizing memory usage
+                    and query performance is crucial. A
+                    <strong>Bloom filter</strong> is a space-efficient
+                    probabilistic data structure designed for scenarios where
+                    memory is limited, and you need to quickly determine if an
+                    element is present or not.
+                </p>
+
+                <h3>What is a Bloom Filter?</h3>
+                <ul>
+                    <li>
+                        A Bloom filter is a data structure that allows you to
+                        test whether an element is in a set with a small
+                        probability of false positives (It may result
+                        non-existing elements as present, but won't return
+                        existing elements as not present).
+                    </li>
+                    <li>
+                        It operates by using multiple hash functions to map an
+                        element to several positions in a bit array.
+                    </li>
+                    <li>
+                        If all the bits at these positions are set to
+                        <code>1</code>, the element is considered to be in the
+                        set; if any of the bits are <code>0</code>, the element
+                        is definitely not in the set.
+                    </li>
+                </ul>
+
+                <div class="note">
+                    <strong>Note:</strong> Deletion is not possible in a Bloom
+                    filter since it stores only the hash, not the actual data.
+                    Unsetting bits can remove other entries as well.
+                </div>
+
+                <h3>How a Bloom Filter Works</h3>
+                <h4>
+                    Simple Implementation: <a href="https://github.com/karthiknathan06/Bloomfilter/blob/main/main.py"><i>bloom_filter.py</i></a>
+                </h4>
+                <ol>
+                    <li>
+                        <strong>Initialization:</strong> A bit array of a fixed
+                        size is initialized, with all bits set to
+                        <code>0</code>.
+                    </li>
+                    <li>
+                        <strong>Adding Elements:</strong> When adding an
+                        element, it is passed through multiple hash functions,
+                        each producing an index corresponding to a position in
+                        the bit array. The bits at these positions are set to
+                        <code>1</code>. Here, the input gets passed through 3
+                        hash functions and returns 3 indices, where bits are set
+                        to 1.
+                        <img
+                            src="assets/explain1.png"
+                            alt="Insert text1"
+                            width="400"
+                        />
+                        <img
+                            src="assets/explain2.png"
+                            alt="Insert text2"
+                            width="400"
+                        />
+                    </li>
+                    <li>
+                        <strong>Checking Membership:</strong> To check if an
+                        element is in the set, it is hashed again using the same
+                        hash functions. If all the bits at the corresponding
+                        positions are <code>1</code>, the element might be in
+                        the set; if any bit is <code>0</code>, the element is
+                        definitely not in the set.
+                        <br>
+                        <img
+                            src="assets/explain3.png"
+                            alt="Search text2"
+                            width="400"
+                        />
+                    </li>
+                    <li>
+                        <strong>False Positives:</strong> Bloom filters can
+                        return false positives, where the filter indicates that
+                        an element is in the set when it’s not. However, they
+                        never return false negatives. Here, even though Africa
+                        is not in the set, and the indices returned by hash
+                        functions are already set, it returns True, which is a
+                        false positive case.
+                        <img
+                            src="assets/explain4.png"
+                            alt="Search NA text"
+                            width="400"
+                        />
+                        <p>
+                            These false positives could be reduced by using
+                            proper hash functions, increasing the bucket size,
+                            increasing the hash functions, and so on.
+                        </p>
+                    </li>
+                </ol>
+
+                <h3>When not to use Bloom Filters</h3>
+                <ul>
+                    <li>When exact results are needed.</li>
+                    <li>When deletion is required.</li>
+                    <li>When space efficiency is not a concern.</li>
+                    <li>If the dataset is small.</li>
+                </ul>
+
+                <h3>Efficiency Compared to Hash Maps</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Bloom Filter</th>
+                            <th>Hash Map</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Space Efficiency</td>
+                            <td>
+                                Uses a fixed-size bit array regardless of the
+                                number of elements, making it highly
+                                space-efficient. It doesn’t store the actual
+                                elements, only a compressed representation.
+                            </td>
+                            <td>
+                                Requires significantly more memory as it stores
+                                both keys and values, and its size grows with
+                                the number of elements. Memory usage increases
+                                due to collision handling and storage of actual
+                                data.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Speed</td>
+                            <td>
+                                Provides O(1) time complexity for both insertion
+                                and membership checks, making it extremely fast.
+                                Operations are quick because they involve simple
+                                hash calculations and bit manipulations.
+                            </td>
+                            <td>
+                                Also offers O(1) time complexity on average, but
+                                performance can degrade with poor hash functions
+                                or many collisions. Handling collisions adds
+                                overhead, especially in large datasets.
+                            </td>
+                    </tbody>tr>
+                        <tr>
+                            <td>No Data Retrieval</td>
+                            <td>
+                                Doesn’t allow retrieval of the actual data, only
+                                checks for existence. This makes it unsuitable
+                                for applications where you need to retrieve
+                                values.
+                            </td>
+                            <td>
+                                Stores and retrieves actual key-value pairs,
+                                which is essential when you need access to the
+                                data itself.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>How Bloom Filters Are Used in Apache Cassandra</h3>
+                <p>
+                    Apache Cassandra, a distributed NoSQL database, uses Bloom
+                    filters to optimize read performance. In Cassandra, data is
+                    stored in tables, and when a query is executed, it needs to
+                    search through multiple SSTables (Sorted String Tables) to
+                    find the relevant data.
+                </p>
+
+                <h4>Reducing Disk I/O</h4>
+                <p>
+                    Cassandra creates a Bloom filter for each SSTable. When a
+                    query is executed, instead of scanning all SSTables on disk,
+                    Cassandra first checks the Bloom filter to see if the
+                    SSTable might contain the requested data.
+                </p>
+                <p>
+                    If the Bloom filter indicates that the data might be in the
+                    SSTable, only then does Cassandra perform a disk read. If
+                    the Bloom filter indicates that the data is not in the
+                    SSTable, the disk read is avoided entirely.
+                </p>
+
+                <h4>Improving Query Performance</h4>
+                <p>
+                    By using Bloom filters, Cassandra minimizes unnecessary disk
+                    reads, which are time-consuming. This significantly improves
+                    query performance, especially in large datasets where
+                    multiple SSTables might be involved.
+                </p>
+
+                <h4>Managing Large Datasets</h4>
+                <p>
+                    Cassandra often deals with massive datasets that are
+                    distributed across multiple nodes. Bloom filters help
+                    efficiently manage these datasets by quickly ruling out
+                    irrelevant SSTables, ensuring that only the necessary data
+                    is accessed.
+                </p>
+
+                <h3>Conclusion</h3>
+                <p>
+                    Bloom filters are a powerful tool for optimizing memory
+                    usage and speeding up membership checks in large datasets.
+                    Compared to hash maps, Bloom filters are more
+                    space-efficient and faster in scenarios where only
+                    membership testing is required. Understanding and utilizing
+                    Bloom filters can lead to significant performance gains in
+                    systems handling vast amounts of data.
+                </p>
+            </div>
         </section>
         <footer>
             <p>
