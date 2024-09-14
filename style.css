@@ -182,3 +182,10 @@ section:hover {
         grid-template-columns: 1fr;
     }
 }
+
+code {
+    background-color: #f4f4f4;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}

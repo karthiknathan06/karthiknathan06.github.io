@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Inverted Index</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <header>
+            <h1>Full text search ?? Inverted Index!</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                </ul>
+            </nav>
+        </header>
+        <section id="blog-content">
+            <div class="container">
+                <h1>Understanding Inverted Indices in Elasticsearch</h1>
+                <p>
+                    Ever Heard about full text search, a key data structure used
+                    in Elasticsearch to enable fast and efficient search
+                    operations.
+                </p>
+
+                <h2>What is an Inverted Index?</h2>
+                <p>
+                    An inverted index is a data structure that maps content to
+                    its locations in a dataset, much like an index at the back
+                    of a book. Unlike a traditional index, which maps topics to
+                    pages, an inverted index maps words (or terms) to the
+                    documents that contain them. This reverse mapping allows
+                    search engines to quickly locate documents that match a
+                    given search query.
+                </p>
+
+                <h2>Components of an Inverted Index</h2>
+                <ul>
+                    <li>
+                        <strong>Term:</strong> A unique word or token extracted
+                        from the content.
+                    </li>
+                    <li>
+                        <strong>Posting:</strong> A record of a term’s
+                        occurrence, typically including the document identifier
+                        and the position of the term within the document.
+                    </li>
+                </ul>
+
+                <h2>How Elasticsearch Uses Inverted Indices</h2>
+                <p>
+                    Elasticsearch leverages inverted indices to perform fast and
+                    efficient full-text searches. When a document is indexed in
+                    Elasticsearch, it breaks down the text into individual terms
+                    and stores these terms in an inverted index. This allows
+                    Elasticsearch to quickly find all documents containing a
+                    specific term or set of terms.
+                </p>
+
+                <h3>Indexing Process</h3>
+                <p>
+                    When a document is added to an Elasticsearch index, the
+                    following steps occur:
+                </p>
+                <ol>
+                    <li>
+                        <strong>Tokenization:</strong> The text in the document
+                        is broken down into individual terms or tokens.
+                    </li>
+                    <li>
+                        <strong>Indexing:</strong> Each term is added to an
+                        inverted index, along with information about the
+                        document it came from and its position within the
+                        document.
+                    </li>
+                </ol>
+
+                <h3>Searching Process</h3>
+                <p>When you perform a search query in Elasticsearch:</p>
+                <ol>
+                    <li>
+                        <strong>Query Parsing:</strong> The search query is
+                        analyzed to extract the terms you're searching for.
+                    </li>
+                    <li>
+                        <strong>Inverted Index Lookup:</strong> Elasticsearch
+                        looks up these terms in the inverted index and retrieves
+                        the list of documents that contain them.
+                    </li>
+                    <li>
+                        <strong>Scoring and Ranking:</strong> The documents are
+                        scored based on their relevance to the query and ranked
+                        accordingly.
+                    </li>
+                </ol>
+
+                <h2>Using Inverted Indices for Centralized Log Management</h2>
+                <h3>Overview</h3>
+                <p>
+                    One of the most common use cases for Elasticsearch is
+                    centralized log management. In this scenario, logs from
+                    various systems (servers, applications, network devices,
+                    etc.) are collected, indexed, and stored in a centralized
+                    Elasticsearch cluster. The inverted index plays a crucial
+                    role in making these logs searchable in real time.
+                </p>
+
+                <h3>Example: Centralized Log Management</h3>
+                <p>
+                    Assume you have the following logs indexed in Elasticsearch:
+                </p>
+
+                <pre><code>{
+          "timestamp": "2024-09-08T10:00:00Z",
+          "log_level": "ERROR",
+          "message": "Database connection failed",
+          "source_ip": "192.168.1.10"
+        }
+
+        {
+          "timestamp": "2024-09-08T10:01:00Z",
+          "log_level": "WARN",
+          "message": "High memory usage detected",
+          "source_ip": "192.168.1.20"
+        }
+
+        {
+          "timestamp": "2024-09-08T10:02:00Z",
+          "log_level": "INFO",
+          "message": "User login successful",
+          "source_ip": "192.168.1.10"
+        }
+        </code></pre>
+
+                <p>
+                    In this case, Elasticsearch creates inverted indices for
+                    fields like
+                    <code>log_level</code>, <code>message</code>, and
+                    <code>source_ip</code>. Here’s how the inverted index might
+                    look:
+                </p>
+
+                <table>
+                    <tr>
+                        <th>log_level Index</th>
+                        <th>Term</th>
+                        <th>Document IDs</th>
+                    </tr>
+                    <tr>
+                        <td>ERROR</td>
+                        <td>Doc1</td>
+                    </tr>
+                    <tr>
+                        <td>WARN</td>
+                        <td>Doc2</td>
+                    </tr>
+                    <tr>
+                        <td>INFO</td>
+                        <td>Doc3</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <th>message Index</th>
+                        <th>Term</th>
+                        <th>Document IDs</th>
+                    </tr>
+                    <tr>
+                        <td>Database</td>
+                        <td>Doc1</td>
+                    </tr>
+                    <tr>
+                        <td>connection</td>
+                        <td>Doc1</td>
+                    </tr>
+                    <tr>
+                        <td>failed</td>
+                        <td>Doc1</td>
+                    </tr>
+                    <tr>
+                        <td>High</td>
+                        <td>Doc2</td>
+                    </tr>
+                    <tr>
+                        <td>memory</td>
+                        <td>Doc2</td>
+                    </tr>
+                    <tr>
+                        <td>usage</td>
+                        <td>Doc2</td>
+                    </tr>
+                    <tr>
+                        <td>detected</td>
+                        <td>Doc2</td>
+                    </tr>
+                    <tr>
+                        <td>User</td>
+                        <td>Doc3</td>
+                    </tr>
+                    <tr>
+                        <td>login</td>
+                        <td>Doc3</td>
+                    </tr>
+                    <tr>
+                        <td>successful</td>
+                        <td>Doc3</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <th>source_ip Index</th>
+                        <th>Term</th>
+                        <th>Document IDs</th>
+                    </tr>
+                    <tr>
+                        <td>192.168.1.10</td>
+                        <td>Doc1, Doc3</td>
+                    </tr>
+                    <tr>
+                        <td>192.168.1.20</td>
+                        <td>Doc2</td>
+                    </tr>
+                </table>
+
+                <p>
+                    To search for all logs with a <code>log_level</code> of
+                    "ERROR" and containing the word "Database" in the message,
+                    you can use the following Elasticsearch query:
+                </p>
+
+                <pre><code>{
+          "query": {
+            "bool": {
+              "must": [
+                { "match": { "log_level": "ERROR" } },
+                { "match": { "message": "Database" } }
+              ]
+            }
+          }
+        }
+        </code></pre>
+
+                <p>
+                    Elasticsearch will use the inverted indices to quickly find
+                    that Document 1 matches both criteria, allowing you to
+                    retrieve relevant logs in milliseconds.
+                </p>
+
+                <h2>Conclusion</h2>
+                <p>
+                    The inverted index is a fundamental component of
+                    Elasticsearch, enabling fast and efficient searches across
+                    large datasets. Whether you're searching through documents
+                    or centralized logs, the inverted index allows Elasticsearch
+                    to quickly pinpoint relevant information, making it a
+                    powerful tool for real-time search and analytics.
+                </p>
+
+                <p>
+                    By understanding how inverted indices work, we can better
+                    appreciate the power of Elasticsearch and leverage its
+                    capabilities to build robust search solutions in your
+                    applications. Whether dealing with massive amounts of text
+                    data or managing logs from a distributed system,
+                    Elasticsearch and its underlying technology provide the
+                    speed and flexibility needed to handle today's search
+                    demands.
+                </p>
+            </div>
+        </section>
+        <footer>
+            <p>
+                Contact:
+                <a href="mailto:karthiknathanc@gmail.com"
+                    >karthiknathanc@gmail.com</a
+                >
+            </p>
+        </footer>
+    </body>
+</html>
