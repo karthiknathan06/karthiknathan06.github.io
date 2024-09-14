@@ -1,25 +1,33 @@
-/* Elegant Portfolio Theme Styles */
-
+/* Base Styles */
 body {
-    font-family: "Arial", sans-serif;
+    font-family: "Helvetica Neue", sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9; /* Light background */
-    color: #333; /* Dark text */
+    background-color: #f5f7fa; /* Light background color */
+    color: #2c3e50; /* Dark text color */
+    line-height: 1.6;
 }
 
 header {
-    background-color: #ffffff; /* White header for elegance */
+    background-color: #ffffff;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for header */
     text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 header h1 {
     margin: 0;
-    font-family: "Georgia", serif; /* Elegant serif font for header */
+    font-family: "Georgia", serif;
     font-size: 2.5em;
-    color: #2c3e50; /* Darker, elegant header color */
+    color: #2980b9; /* Elegant blue for header text */
+}
+
+header h2 {
+    font-size: 1.2em;
+    color: #7f8c8d; /* Subtle grey for tagline */
 }
 
 nav ul {
@@ -29,82 +37,148 @@ nav ul {
 }
 
 nav ul li {
-    display: inline;
+    display: inline-block;
     margin: 0 15px;
 }
 
 nav ul li a {
-    color: #2980b9; /* Soft blue color for links */
+    color: #2980b9;
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s;
 }
 
 nav ul li a:hover {
-    color: #3498db; /* Slightly lighter blue on hover */
+    color: #3498db; /* Hover effect for navigation */
 }
 
+/* Section Styling */
 section {
     padding: 40px 20px;
-    max-width: 900px;
-    margin: auto;
-    background-color: #fff;
+    max-width: 1200px;
+    margin: 40px auto;
+    background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
-    margin-bottom: 30px;
+    transition: box-shadow 0.3s ease;
 }
 
-section h2 {
+section:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Hover effect for section */
+}
+
+h2 {
     font-family: "Georgia", serif;
     font-size: 2em;
-    color: #34495e; /* Elegant, soft dark for headings */
+    color: #34495e;
+    margin-bottom: 20px;
     border-bottom: 2px solid #ecf0f1;
     padding-bottom: 10px;
 }
 
-section p {
-    line-height: 1.8;
-    font-size: 1.1em;
+h3 {
+    font-size: 1.5em;
+    color: #2980b9;
+    margin-bottom: 10px;
 }
 
-section ul {
+p,
+ul {
+    font-size: 1.1em;
+    line-height: 1.8;
+}
+
+ul {
     padding-left: 20px;
 }
 
-section ul li {
+ul li {
     margin-bottom: 10px;
-    font-size: 1.1em;
 }
 
+/* Skills Grid */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.skills-grid div {
+    background-color: #f9fbfc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
+    transition: box-shadow 0.3s;
+}
+
+.skills-grid div:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Hover effect for skill cards */
+}
+
+.skills-grid h3 {
+    font-size: 1.3em;
+    color: #3498db;
+    margin-bottom: 15px;
+}
+
+/* Footer Styling */
 footer {
     text-align: center;
     background-color: #ffffff;
-    color: #7f8c8d;
     padding: 20px;
+    color: #7f8c8d;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
 footer a {
     color: #2980b9;
     text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
 }
 
 footer a:hover {
     color: #3498db;
 }
 
+/* General Styling */
 a {
     color: #2980b9;
     text-decoration: none;
+    font-weight: bold;
 }
 
 a:hover {
     color: #3498db;
 }
 
-/* Additional styling for smooth transitions */
+/* Section Hover Effects */
+section:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
 * {
     transition:
         background-color 0.3s ease,
         color 0.3s ease,
         box-shadow 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        font-size: 0.9em;
+    }
+
+    header h1 {
+        font-size: 2em;
+    }
+
+    section {
+        padding: 20px;
+    }
+
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
 }
